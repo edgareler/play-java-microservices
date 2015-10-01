@@ -1,0 +1,105 @@
+body {
+	margin: 0;
+	font-family: sans-serif;
+	color: black;
+}
+
+header, 
+footer {
+	width: 100%;
+	padding: 2.0rem 0;
+	text-align: center; 
+	font-size: 2.0rem;
+	font-weight: bold;
+}
+
+header {
+	background-color: #002244;
+	color: white;
+}
+
+footer {
+	background-color: #EEEEEE;
+}
+
+footer a,
+a.back {
+	font-size: 1.0rem;
+	color: #333333;
+}
+
+a.back {
+	display: inline-block;
+	margin: 2.0rem;
+	font-weight: bold;
+}
+
+div#page-title {
+	width: 100%;
+	margin-top: 1.500rem;
+	text-align: center; 
+	font-size: 1.200rem;
+	font-weight: bold;
+}
+
+div#main {
+	width: 100%;
+	max-width: 1280px;
+	margin: auto;
+	padding: 2.0rem 0;
+	font-size: 1.0rem;
+	text-align: center;
+}
+
+
+a.account {
+	display: inline-block;
+	text-decoration: none;
+	color: black;
+	padding: 1.0rem 2.0rem;
+	text-align: center;
+	margin:1.0rem;
+	background-color: #DDDDDD;	
+}
+
+div#labels,
+div#fields {
+	display: inline-block;
+	text-align: left;
+	vertical-align: top;
+	padding: 1.0rem;
+	line-height: 2.500rem;
+}
+
+input[type="text"],
+input[type="password"] {
+	font-size: 1.0rem;
+	width: 10.0rem;
+}
+
+table {
+	border: 0;
+	padding: 0;
+	margin: auto;
+}
+
+thead {
+	font-weight: bold;
+}
+
+th, td {
+	padding: 0.200rem 1.0rem;
+	text-align: center;
+}
+
+tr td:last-child {
+	text-align: right;
+}
+
+.Withdrawal {
+	color: red;
+}
+
+.Deposit {
+	color: blue;
+}

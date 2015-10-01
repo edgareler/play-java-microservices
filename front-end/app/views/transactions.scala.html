@@ -1,0 +1,52 @@
+@(account: String, transactions: List[models.Transaction])
+
+@main("Transactions - " + account, true) {
+
+    <table>
+    	<thead>
+    		<th>Date</th>
+    		<th>Type</th>
+    		<th>Amount</th>
+    	</thead>
+    	<tbody>
+    	
+		@for(transaction <- transactions){
+	    	<tr class="@transaction.getType()">
+	    		<td>@transaction.getDate().toString()</td>
+	    		<td>@transaction.getType()</td>
+	    		<td>@transaction.getAmount()</td>
+	    	</tr>
+    	}
+    	<!-- 
+	    	<tr class="Withdrawal">
+	    		<td>2015-09-30 21:10:53</td>
+	    		<td>Withdrawal</td>
+	    		<td>39.95</td>
+	    	</tr>
+	    	<tr class="Deposit">
+	    		<td>2015-09-30 21:10:53</td>
+	    		<td>Deposit</td>
+	    		<td>39.95</td>
+	    	</tr>
+	    	<tr class="Withdrawal">
+	    		<td>2015-09-30 21:10:53</td>
+	    		<td>Withdrawal</td>
+	    		<td>39.95</td>
+	    	</tr>
+	    	<tr class="Withdrawal">
+	    		<td>2015-09-30 21:10:53</td>
+	    		<td>Withdrawal</td>
+	    		<td>39.95</td>
+	    	</tr>
+	    	<tr class="Deposit">
+	    		<td>2015-09-30 21:10:53</td>
+	    		<td>Deposit</td>
+	    		<td>39.95</td>
+	    	</tr>
+    	 -->
+    	</tbody>
+    </table>
+    
+    <a href="/" class="back">Return to Accounts</a>
+
+}

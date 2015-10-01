@@ -1,0 +1,28 @@
+@(title: String, logged: Boolean)(content: Html)
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>Internet Banking System - @title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimal-ui">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
+        <script src="@routes.Assets.versioned("javascripts/scripts.js")" type="text/javascript"></script>
+    </head>
+    <body>
+    	<header>
+    		Internet Banking System
+    	</header>   		<div id="page-title">
+   			@title
+   		</div>
+    	<div id="main">
+        	@content
+        </div>
+   	@if(logged == true) {
+        <footer>   	
+	   		<a href="#" id="logout">Logout</a>    	
+        </footer>
+    }    
+    </body>
+</html>

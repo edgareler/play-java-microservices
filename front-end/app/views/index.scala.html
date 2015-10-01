@@ -1,0 +1,9 @@
+@(accounts: List[models.Account])
+
+@main("Accounts", true) {
+
+	@for(account <- accounts){
+    	<a href="/transactions/@account.getId()" class="account">@account.getName()</a>
+    }
+    
+}

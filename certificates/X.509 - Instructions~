@@ -1,0 +1,116 @@
+# Generating a server CA
+
+
+export PW=`pwgen -Bs 10 1`
+echo $PW > password
+
+export PW=`cat password`
+
+# Create a self signed key pair root CA certificate.
+keytool -genkeypair -v \
+  -alias edgarsysca \
+  -dname "CN=edgarsysCA, OU=EdgarSys Org, O=EdgarSys Company, L=Vitoria, ST=ES, C=BR" \
+  -keystore edgarsysca.jks \
+  -keypass:env PW \
+  -storepass:env PW \
+  -keyalg RSA \
+  -keysize 4096 \
+  -ext KeyUsage:critical="keyCertSign" \
+  -ext BasicConstraints:critical="ca:true" \
+  -validity 9999
+
+# Export the exampleCA public certificate as edgarsysca.crt so that it can be used in trust stores.
+keytool -export -v \
+  -alias edgarsysca \
+  -file edgarsysca.crt \
+  -keypass:env PW \
+  -storepass:env PW \
+  -keystore edgarsysca.jks \
+  -rfc
+
+
+# Generating edgarsys.com certificates
+
+
+export PW=`cat password`
+
+# Create a server certificate, tied to edgarsys.com
+keytool -genkeypair -v \
+  -alias edgarsys.com \
+  -dname "CN=edgarsys.com, OU=EdgarSys Org, O=EdgarSys Company, L=Vitoria, ST=ES, C=BR" \
+  -keystore edgarsys.com.jks \
+  -keypass:env PW \
+  -storepass:env PW \
+  -keyalg RSA \
+  -keysize 2048 \
+  -validity 385
+
+# Create a certificate signing request for edgarsys.com
+keytool -certreq -v \
+  -alias edgarsys.com \
+  -keypass:env PW \
+  -storepass:env PW \
+  -keystore edgarsys.com.jks \
+  -file edgarsys.com.csr
+
+# Tell edgarsysCA to sign the edgarsys.com certificate. Note the extension is on the request, not the
+# original certificate.
+# Technically, keyUsage should be digitalSignature for DHE or ECDHE, keyEncipherment for RSA.
+keytool -gencert -v \
+  -alias edgarsysca \
+  -keypass:env PW \
+  -storepass:env PW \
+  -keystore edgarsysca.jks \
+  -infile edgarsys.com.csr \
+  -outfile edgarsys.com.crt \
+  -ext KeyUsage:critical="digitalSignature,keyEncipherment" \
+  -ext EKU="serverAuth" \
+  -ext SAN="DNS:edgarsys.com" \
+  -rfc
+
+# Tell edgarsys.com.jks it can trust edgarsysca as a signer.
+keytool -import -v \
+  -alias edgarsysca \
+  -file edgarsysca.crt \
+  -keystore edgarsys.com.jks \
+  -storetype JKS \
+  -storepass:env PW << EOF
+yes
+EOF
+
+# Import the signed certificate back into edgarsys.com.jks 
+keytool -import -v \
+  -alias edgarsys.com \
+  -file edgarsys.com.crt \
+  -keystore edgarsys.com.jks \
+  -storetype JKS \
+  -storepass:env PW
+
+# List out the contents of example.com.jks just to confirm it.  
+# If you are using Play as a TLS termination point, this is the key store you should present as the server.
+keytool -list -v \
+  -keystore edgarsys.com.jks \
+  -storepass:env PW
+
+
+# Client Configuration
+
+# Configuring a Trust Store
+
+
+export PW=`cat password`
+
+# Create a JKS keystore that trusts the edgarsys CA, with the default password.
+keytool -import -v \
+  -alias edgarsysca \
+  -file edgarsysca.crt \
+  -keypass:env PW \
+  -storepass changeit \
+  -keystore edgarsystrust.jks << EOF
+yes
+EOF
+
+# List out the details of the store password.
+keytool -list -v \
+  -keystore exampletrust.jks \
+  -storepass changeit
